@@ -83,7 +83,7 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    corpus = {'1': {'2'}, '2': {'3', '1'}, '3': {'5', '2', '4'}, '4': {'1', '2'}, '5': set()}
+    
     keys = list(corpus.keys())
     countDict = {}
     for key in keys:
@@ -113,7 +113,7 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    corpus = {'1': {'2'}, '2': {'3', '1'}, '3': {'5', '2', '4'}, '4': {'1', '2'}, '5': set()}
+   
     probDict = {}
     start_value = 1 / len(corpus)
     for key in corpus.keys():
