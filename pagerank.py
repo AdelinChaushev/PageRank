@@ -60,10 +60,12 @@ def transition_model(corpus, page, damping_factor):
     links = corpus[page]
     let = len(corpus[page])
     randomPagePercent =  (1 - damping_factor) / len(corpus)
-    LinkedPagePercent = (damping_factor) / len(corpus[page])
     distribution = {}
     for page in corpus.keys():
         distribution[page] = randomPagePercent
+    if let == 0 :
+        return distribution
+    LinkedPagePercent = (damping_factor) / let
     for nowPage in links :
         distribution[nowPage] += LinkedPagePercent
 
@@ -81,6 +83,7 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
+    corpus = {'1': {'2'}, '2': {'3', '1'}, '3': {'5', '2', '4'}, '4': {'1', '2'}, '5': set()}
     keys = list(corpus.keys())
     countDict = {}
     for key in keys:
@@ -110,6 +113,7 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
+    corpus = {'1': {'2'}, '2': {'3', '1'}, '3': {'5', '2', '4'}, '4': {'1', '2'}, '5': set()}
     probDict = {}
     start_value = 1 / len(corpus)
     for key in corpus.keys():
@@ -121,7 +125,9 @@ def iterate_pagerank(corpus, damping_factor):
             new_rank = (1 - damping_factor) / len(corpus)
             for link, linked_pages in corpus.items():
                 if page in linked_pages:
-                    new_rank += damping_factor * probDict[link] / len(linked_pages)
+                    new_rank += damping_factor * (probDict[link] / len(linked_pages))
+            for dangling_node in set(page for page, links in corpus.items() if not links):
+                new_rank += damping_factor * probDict[dangling_node] / len(corpus)        
             if abs(new_rank - probDict[page]) > minChange:
                 flag = True  # Indicates that PageRank values have not converged yet
             probDict[page] = new_rank
